@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Clara ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("fundo.jpg") center center no-repeat;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
+
+/* tela de bloqueio */
+.bloqueio {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: rgba(0,0,0,0.5);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 350px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+    color: #ff4f7b;
+}
+
+/* álbum */
+.album {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.foto {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+
+.foto.ativa {
+    opacity: 1;
+}
+
+.mensagem {
+    position: absolute;
+    bottom: 120px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.4);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.botao {
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="musica" src="musica.mp3" loop></audio>
+
+<!-- BLOQUEIO -->
+<div id="telaBloqueio" class="bloqueio">
+    <div class="card">
+        <h2>Para Clara ❤️</h2>
+        <p>Será que me ama? Quantos dias namorando?</p>
+        <input type="number" id="resposta">
+        <button onclick="verificar()">Entrar</button>
+    </div>
+</div>
+
+<!-- ÁLBUM -->
+<div id="album" class="album" onclick="proximaFoto()">
+    <img id="fotoAtual" class="foto ativa" src="foto1.jpg">
+    <div id="mensagem" class="mensagem"></div>
+    <button class="botao">Próxima</button>
+</div>
+
+<script>
+const diasCorretos = 411; // MUDE AQUI
+
+let fotos = [
+"foto1.jpg",
+"foto2.jpg",
+"foto3.jpg",
+"foto4.jpg",
+"foto5.jpg",
+"foto6.jpg",
+"foto7.jpg",
+"foto8.jpg",
+"foto9.jpg"
+];
+
+let mensagens = [
+"Meu trenzin, oia oque eu fiz pro cê sem ajuda do CHAT ❤️",
+"Você é muito especial pra eu",
+"Você é meu mundo",
+"Eu amo compartilhar nossas vidas",
+"A mulher mais linda desse mundo",
+"Tira a mão do meu pintu",
+"Eu amo oce demais",
+"Quero sempre estar com você",
+"🎉 Feliz aniversário meu amor todo, eu não te amo, i love you! 🎉"
+];
+
+let index = 0;
+
+function verificar() {
+    let valor = document.getElementById("resposta").value;
+
+    if (parseInt(valor) === diasCorretos) {
+        document.getElementById("telaBloqueio").style.display = "none";
+        document.getElementById("album").style.display = "block";
+        atualizarTela();
+        document.getElementById("musica").play();
+    } else {
+        alert("Quase! Tente novamente ❤️");
+    }
+}
+
+function atualizarTela() {
+    const foto = document.getElementById("fotoAtual");
+
+    foto.classList.remove("ativa");
+
+    setTimeout(() => {
+        foto.src = fotos[index];
+        foto.classList.add("ativa");
+    }, 300);
+
+    document.getElementById("mensagem").innerText = mensagens[index];
+}
+
+function proximaFoto() {
+    if (index < fotos.length - 1) {
+        index++;
+        atualizarTela();
+    }
+}
+
+atualizarTela();
+</script>
+
+</body>
+</html>
