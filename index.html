@@ -2,96 +2,131 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Para Clara ❤️</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: url("fundo.jpg") center center no-repeat;
-    background-size: cover;
-    height: 100vh;
-    overflow: hidden;
-    color: white;
-}
+    /* Reset básico para mobile */
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-/* tela de bloqueio */
-.bloqueio {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #000;
+        overflow: hidden;
+        color: white;
+    }
 
-.card {
-    background: rgba(0,0,0,0.5);
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    width: 80%;
-    max-width: 350px;
-}
+    /* Fundo fixo para a tela de bloqueio */
+    .bg-fundo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("fundo.jpg") center center no-repeat;
+        background-size: cover;
+        z-index: 1;
+    }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-}
+    /* Tela de Bloqueio Centralizada */
+    .bloqueio {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.2);
+    }
 
-button {
-    margin-top: 15px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    background: white;
-    color: #ff4f7b;
-}
+    .card {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 40px 20px;
+        border-radius: 25px;
+        text-align: center;
+        width: 85%;
+        max-width: 320px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
 
-/* álbum */
-.album {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: none;
-}
+    h2 { margin-bottom: 10px; font-size: 24px; }
+    p { margin-bottom: 20px; opacity: 0.9; font-size: 16px; }
 
-.foto {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.2s ease;
-}
+    input {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        border: none;
+        font-size: 18px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+    }
 
-.foto.ativa {
-    opacity: 1;
-}
+    .btn-entrar {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        background: #ff4f7b;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-.mensagem {
-    position: absolute;
-    bottom: 120px;
-    left: 20px;
-    right: 20px;
-    background: rgba(0,0,0,0.4);
-    padding: 15px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 22px;
-}
+    /* Álbum Estilo Instagram */
+    .album {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        z-index: 20;
+        background: #000;
+    }
 
-.botao {
-    position: absolute;
-    right: 20px;
-    bottom: 40px;
-}
+    .foto {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        /* Ajusta a foto para cobrir a tela sem distorcer, como no Instagram */
+        object-fit: cover; 
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+    }
+
+    .foto.ativa {
+        opacity: 1;
+    }
+
+    /* Botão Próxima Invisível ou Discreto */
+    .botao-proximo {
+        position: absolute;
+        bottom: 40px;
+        right: 20px;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+        backdrop-filter: blur(5px);
+        font-weight: bold;
+        z-index: 100;
+    }
 </style>
 </head>
 
@@ -99,48 +134,29 @@ button {
 
 <audio id="musica" src="musica.mp3" loop></audio>
 
-<!-- BLOQUEIO -->
+<div id="bgFundo" class="bg-fundo"></div>
+
 <div id="telaBloqueio" class="bloqueio">
     <div class="card">
         <h2>Para Clara ❤️</h2>
-        <p>Será que me ama? Quantos dias namorando?</p>
-        <input type="number" id="resposta">
-        <button onclick="verificar()">Entrar</button>
+        <p>Quantos dias namorando?</p>
+        <input type="number" id="resposta" pattern="\d*" inputmode="numeric" placeholder="000">
+        <button class="btn-entrar" onclick="verificar()">Desbloquear</button>
     </div>
 </div>
 
-<!-- ÁLBUM -->
 <div id="album" class="album" onclick="proximaFoto()">
-    <img id="fotoAtual" class="foto ativa" src="foto1.jpg">
-    <div id="mensagem" class="mensagem"></div>
-    <button class="botao">Próxima</button>
+    <img id="fotoAtual" class="foto" src="">
+    <button id="btnProximo" class="botao-proximo">Próxima ➔</button>
 </div>
 
 <script>
-const diasCorretos = 411; // MUDE AQUI
+const diasCorretos = 411;
 
 let fotos = [
-"foto1.jpg",
-"foto2.jpg",
-"foto3.jpg",
-"foto4.jpg",
-"foto5.jpg",
-"foto6.jpg",
-"foto7.jpg",
-"foto8.jpg",
-"foto9.jpg"
-];
-
-let mensagens = [
-"Meu trenzin, oia oque eu fiz pro cê sem ajuda do CHAT ❤️",
-"Você é muito especial pra eu",
-"Você é meu mundo",
-"Eu amo compartilhar nossas vidas",
-"A mulher mais linda desse mundo",
-"Tira a mão do meu pintu",
-"Eu amo oce demais",
-"Quero sempre estar com você",
-"🎉 Feliz aniversário meu amor todo, eu não te amo, i love you! 🎉"
+    "foto1.jpg", "foto2.jpg", "foto3.jpg", 
+    "foto4.jpg", "foto5.jpg", "foto6.jpg", 
+    "foto7.jpg", "foto8.jpg", "foto9.jpg"
 ];
 
 let index = 0;
@@ -150,25 +166,31 @@ function verificar() {
 
     if (parseInt(valor) === diasCorretos) {
         document.getElementById("telaBloqueio").style.display = "none";
+        document.getElementById("bgFundo").style.display = "none";
         document.getElementById("album").style.display = "block";
         atualizarTela();
-        document.getElementById("musica").play();
+        document.getElementById("musica").play().catch(e => console.log("Áudio aguardando interação"));
     } else {
-        alert("Quase! Tente novamente ❤️");
+        alert("Ops! Pensa mais um pouquinho... ❤️");
     }
 }
 
 function atualizarTela() {
-    const foto = document.getElementById("fotoAtual");
+    const fotoElemento = document.getElementById("fotoAtual");
+    const botao = document.getElementById("btnProximo");
 
-    foto.classList.remove("ativa");
-
+    // Troca suave de imagem
+    fotoElemento.style.opacity = "0";
+    
     setTimeout(() => {
-        foto.src = fotos[index];
-        foto.classList.add("ativa");
-    }, 300);
+        fotoElemento.src = fotos[index];
+        fotoElemento.style.opacity = "1";
+    }, 100);
 
-    document.getElementById("mensagem").innerText = mensagens[index];
+    // Esconde o botão se chegar na última foto
+    if (index === fotos.length - 1) {
+        botao.style.display = "none";
+    }
 }
 
 function proximaFoto() {
@@ -177,8 +199,6 @@ function proximaFoto() {
         atualizarTela();
     }
 }
-
-atualizarTela();
 </script>
 
 </body>
